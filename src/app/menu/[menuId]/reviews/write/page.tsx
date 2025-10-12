@@ -122,7 +122,7 @@ export default function ReviewPost() {
         return actionFunction();
       })
       .then(() => {
-        openModal(ConfirmModal, {
+        openModal(ConfirmModal, { 
           type: isEditMode ? "edit" : "submit",
           onClose: () => {
             router.back();
