@@ -20,6 +20,22 @@ export default function MyReviewGroup({
     setIsOpen((prev) => !prev);
   }
 
+  // 서버에서 etc를 object로 보내주지 않는 문제 임시 대응
+  // TODO: 서버한테 etc를 object로 보내달라고 하기
+  const parseEtc = (etc: any) => {
+    if (etc) {
+      if (typeof etc === "string") {
+        try {
+          etc = JSON.parse(etc);
+        } catch (e) {
+          console.error("Failed to parse etc:", e);
+          etc = {};
+        }
+      }
+    }
+    return etc;
+  }
+
   return (
     <>
       <Container $isOpen={isOpen}>
@@ -35,9 +51,10 @@ export default function MyReviewGroup({
         <Body $isOpen={isOpen}>
           <HLine />
           <MyReviewContainer>
-            {reviews.map((review) => (
-              <MyReviewItem key={review.id} review={review} />
-            ))}
+            {reviews.map((review) => {
+              review.etc = parseEtc(review.etc);
+              return <MyReviewItem key={review.id} review={review} />
+            })}
           </MyReviewContainer>
         </Body>
       </Container>
